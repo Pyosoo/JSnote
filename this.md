@@ -1,4 +1,4 @@
-# this
+# ※this
 - - -
 
 #### Javascript의 this   
@@ -52,3 +52,40 @@ let user = {
 user.sayHi(); // 보라
 ```
 
+# ※ this 바인딩
+- - -
+Javascript에서 this 때문에 좀 혼잡한 부분이 있다.   
+C++에서 this를 사용할 땐 this의 주최가 되는 것이 명확했어서 헷갈릴 것이 별로 적었지만,   
+JS에서는 아무때나 this를 사용할 수 있다.   
+```
+function sum = (a,b) => {
+  return this.a + this.b;
+}
+```
+다음과 같은 코드에서 this는 누구를 가르킬까?   
+객체없이 호출되는 경우에는 **전역 객체** 가 바인딩 되는데, 브라우저 환경에서는 window객체가 바인딩된다.   
+
+```
+function Something(){
+  this.value = 1;
+  setInterval(function increase(){
+     this.value++;
+     },1000);
+ }
+ const obj = new Something();
+ ```
+ 실행해보면 의도와 달리 obj.value는 증가하지 않는다.  setInterval 핫무의 인자로 들어간 increase함수는    
+ 전역환경에서 실행되기 때문에 this는 window객체를 참조한다.   
+ 
+ ### 클로져(closure)   
+ ES5에선 위와같은 문제를 해결하기 위해 클로져를 사용했다.   
+ 클로저는 함수가 생성되는 시점에 접근 가능했던 변수들을 생성 이후에도 계속해서 접근할 수 있게 해주는 기능이다.   
+ 
+ ```
+ function makeAddFunc(x){
+  return function add(y) {
+    return x + y;
+    };
+ }
+ ```
+ add 함수는 상위 함수인 makeAddFunc의 매개변수 x에 접근할 수 있다.    
