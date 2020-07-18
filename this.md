@@ -77,6 +77,31 @@ function Something(){
  실행해보면 의도와 달리 obj.value는 증가하지 않는다.  setInterval 핫무의 인자로 들어간 increase함수는    
  전역환경에서 실행되기 때문에 this는 window객체를 참조한다.   
  
+ + 해결법1(클로저)    
+ ```
+ function Somethin(){
+  this.value = 1;
+  var that = this;
+  setInterval(function increase(){
+    thiar.value++;
+  },1000);
+}
+const obj = new Something();
+//미리 저장해둔 that변수를 통해 this객체에 접근한다.   
+ ```
+ 
++ 해결법2 (화살표함수)   
+ ```
+ function Something(){
+  this.value = 1;
+  setInterbal( () => {
+    this.value++;
+   },1000);
+ }
+ const obj = new Something();
+ // 화살표함수를 사용했기 때문에 this는 setInterval의 동작과는 상관없이 obj를 참조한다. setInterval은 브라우저의 함수임으로 기본 this가 브라우저였던 것인데    
+ // function함수로 감싸져있고 화살표함수를 사용함으로써 이를 바꿔준 것 같다.
+ ```
  ### 클로져(closure)   
  ES5에선 위와같은 문제를 해결하기 위해 클로져를 사용했다.   
  클로저는 함수가 생성되는 시점에 접근 가능했던 변수들을 생성 이후에도 계속해서 접근할 수 있게 해주는 기능이다.   
@@ -87,5 +112,5 @@ function Something(){
     return x + y;
     };
  }
+ // add 함수는 상위 함수인 makeAddFunc의 매개변수 x에 접근할 수 있다.    
  ```
- add 함수는 상위 함수인 makeAddFunc의 매개변수 x에 접근할 수 있다.    
